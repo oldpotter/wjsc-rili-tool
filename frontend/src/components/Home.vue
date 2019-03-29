@@ -2,16 +2,16 @@
   <div>
     <h4>无境书茶2019日历工具</h4>
     <canvas id='canvas' width="300" height="300"></canvas>
-    <canvas id='canvas2' width="300" height="300" hidden></canvas>
     <div style="padding: 10vw;">
       <b-button v-bind:disabled='!canDownload' block variant='success' @click='download'>下载图片</b-button>
       <b-button block variant='primary' @click='open'>打开相机</b-button>
-      <input id="takepicture" type="file" accept="image/*" style="display: none" @change="setImagePreview">
+      <input id="takepicture" type="file" style="display: none" @change="setImagePreview">
     </div>
   </div>
 </template>
 
 <script>
+import moment from 'moment'
 export default {
   name: 'Home',
 
@@ -54,7 +54,7 @@ export default {
         context.drawImage(img, -dx, -dy, dWidth, dHeight)
         const link = document.createElement('a')
         link.href = document.getElementById('canvas').toDataURL('image/png')
-        link.download = '1.png'
+        link.download = `${moment().unix()}.png`
         link.click()
       }
       img.src = src
@@ -141,8 +141,5 @@ export default {
 canvas{
   border:1px solid #ececec;
   /*background-color: red;*/
-}
-.back{
-  background: white;
 }
 </style>
