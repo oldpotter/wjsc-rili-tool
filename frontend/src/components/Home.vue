@@ -5,7 +5,8 @@
     <div style="padding: 10vw;">
       <b-button v-bind:disabled='!canDownload' block variant='success' @click='download'>下载图片</b-button>
       <b-button block variant='primary' @click='open'>打开相机</b-button>
-      <input id="takepicture" type="file" style="display: none" @change="setImagePreview">
+      <input id="takepicture" type="file" accept="image/*" style="display: none" @change="setImagePreview">
+      <a id='a' style="display: none"/>
     </div>
   </div>
 </template>
@@ -52,7 +53,7 @@ export default {
       img.onload = () => {
         const {dx, dy, dWidth, dHeight} = this.getCanvasInfo(img, 300, 300)
         context.drawImage(img, -dx, -dy, dWidth, dHeight)
-        const link = document.createElement('a')
+        let link = document.getElementById('a')
         link.href = document.getElementById('canvas').toDataURL('image/png')
         link.download = `${moment().unix()}.png`
         link.click()
