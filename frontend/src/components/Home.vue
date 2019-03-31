@@ -7,12 +7,17 @@
       <b-button block variant='primary' @click='open'>打开相机</b-button>
       <input id="takepicture" type="file" accept="image/*" style="display: none" @change="setImagePreview">
       <a id='a' style="display: none"/>
+      <div :style='canDownload ? "display: block":"display: none"' style="margin-top: 10px;">
+        <b-form-select v-model="selected" :options="options"></b-form-select>
+        <vue-slider style="margin-top: 20px;" v-model="value" @change='change'/>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import moment from 'moment'
+import Jimp from 'jimp'
 export default {
   name: 'Home',
 
@@ -20,7 +25,15 @@ export default {
     return {
       qrPath: '/static/pic/qr.jpeg',
       logoPath: '/static/pic/logo.png',
-      canDownload: false
+      canDownload: false,
+      value: 50, // slider value
+      photo: null, // 选择的图片
+      selected: 'brightness', // 选项
+      options: [
+        { value: 'brightness', text: '亮度' },
+        { value: 'contrast', text: '对比度' }
+      ],
+      timeoutId: null
     }
   },
 
@@ -38,10 +51,40 @@ export default {
     canvas.style.height = oldHeight + 'px'
     context.scale(ratio, ratio)
     this.drawRound(context)
-    this.drawImage(context)
+    this.drawLogo(context)
   },
 
   methods: {
+    // when slider change
+    change () {
+      if (this.timeoutId) {
+        clearTimeout(this.timeoutId)
+      }
+      this.timeoutId = setTimeout(() => {
+        Jimp.read(this.photo.src)
+          .then(image => {
+            const value = this.value / 100 - 0.5
+            if (this.selected === 'brightness') {
+              image.brightness(value)
+                .getBase64Async(Jimp.MIME_PNG)
+                .then(imgSrc => {
+                  this.photo.src = imgSrc
+                })
+            } else {
+              image.contrast(value)
+                .getBase64Async(Jimp.MIME_PNG)
+                .then(imgSrc => {
+                  this.photo.src = imgSrc
+                })
+            }
+          })
+          .catch(err => {
+            console.error(err)
+          })
+      }, 500)
+    },
+
+    //  下载图片
     download () {
       const src = document.getElementById('canvas').toDataURL('image/jpg')
       const context = document.getElementById('canvas').getContext('2d')
@@ -53,6 +96,7 @@ export default {
       img.onload = () => {
         const {dx, dy, dWidth, dHeight} = this.getCanvasInfo(img, 300, 300)
         context.drawImage(img, -dx, -dy, dWidth, dHeight)
+        //  直接createElement('a')有时没有反应，不知道为什么
         let link = document.getElementById('a')
         link.href = document.getElementById('canvas').toDataURL('image/png')
         link.download = `${moment().unix()}.png`
@@ -72,7 +116,7 @@ export default {
       context.fill()
     },
 
-    drawImage (context) {
+    drawLogo (context) {
       context.globalCompositeOperation = 'source-over'
       const qrImg = new Image()
       qrImg.onload = () => {
@@ -86,27 +130,36 @@ export default {
       logoImg.src = this.logoPath
     },
 
+    //  打开本地相机相册
     open () {
       const takePicture = document.getElementById('takepicture')
       takePicture.click()
     },
 
+    //  预览
     setImagePreview (e) {
-      const photo = new Image()
-      photo.onload = () => {
+      const URL = window.URL || window.webkitURL
+      const src = URL.createObjectURL(e.target.files[0])
+      this.reDrawPhoto(src)
+    },
+
+    // 重新绘制图片
+    reDrawPhoto (src) {
+      this.photo = new Image()
+      this.photo.onload = () => {
         const context = document.getElementById('canvas').getContext('2d')
         context.clearRect(0, 0, 300, 300)
         this.drawRound(context)
         context.globalCompositeOperation = 'source-atop'
-        const {dx, dy, dWidth, dHeight} = this.getCanvasInfo(photo, 300, 300)
-        context.drawImage(photo, -dx, -dy, dWidth, dHeight)
-        this.drawImage(context)
+        const {dx, dy, dWidth, dHeight} = this.getCanvasInfo(this.photo, 300, 300)
+        context.drawImage(this.photo, -dx, -dy, dWidth, dHeight)
+        this.drawLogo(context)
         this.canDownload = true
       }
-      const URL = window.URL || window.webkitURL
-      photo.src = URL.createObjectURL(e.target.files[0])
+      this.photo.src = src
     },
 
+    //  重新调整选择图片
     getCanvasInfo (headImg, canvW, canH) {
       const imgX = headImg.width
       const imgY = headImg.height
