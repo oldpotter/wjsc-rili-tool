@@ -38,20 +38,20 @@ export default {
   },
 
   mounted () {
-    const canvas = document.getElementById('canvas')
-    const context = canvas.getContext('2d')
-    var devicePixelRatio = window.devicePixelRatio || 1
-    var backingStoreRatio = context.webkitBackingStorePixelRatio || context.mozBackingStorePixelRatio || context.msBackingStorePixelRatio || context.oBackingStorePixelRatio || context.backingStorePixelRatio || 1
-    var ratio = devicePixelRatio / backingStoreRatio
-    var oldWidth = canvas.width
-    var oldHeight = canvas.height
-    canvas.width = oldWidth * ratio
-    canvas.height = oldHeight * ratio
-    canvas.style.width = oldWidth + 'px'
-    canvas.style.height = oldHeight + 'px'
-    context.scale(ratio, ratio)
-    this.drawRound(context)
-    this.drawLogo(context)
+    // const canvas = document.getElementById('canvas')
+    // const context = canvas.getContext('2d')
+    // var devicePixelRatio = window.devicePixelRatio || 1
+    // var backingStoreRatio = context.webkitBackingStorePixelRatio || context.mozBackingStorePixelRatio || context.msBackingStorePixelRatio || context.oBackingStorePixelRatio || context.backingStorePixelRatio || 1
+    // var ratio = devicePixelRatio / backingStoreRatio
+    // var oldWidth = canvas.width
+    // var oldHeight = canvas.height
+    // canvas.width = oldWidth * ratio
+    // canvas.height = oldHeight * ratio
+    // canvas.style.width = oldWidth + 'px'
+    // canvas.style.height = oldHeight + 'px'
+    // context.scale(ratio, ratio)
+    // this.drawRound(context)
+    // this.drawLogo(context)
   },
 
   methods: {
