@@ -2,13 +2,16 @@
   <div>
     <h4>无境书茶2019日历工具</h4>
     <canvas id='canvas' width="300" height="300"></canvas>
+    <div :style="loading ? 'display: block;': 'display: none;'" style="position: fixed; top: 48vh; left: 48vw;">
+      <b-spinner variant="primary" label="Spinning"></b-spinner>
+    </div>
     <div style="padding: 10vw;">
       <b-button v-bind:disabled='!canDownload' block variant='success' @click='download'>下载图片</b-button>
       <b-button block variant='primary' @click='open'>打开相机</b-button>
       <input id="takepicture" type="file" accept="image/*" style="display: none" @change="setImagePreview">
       <a id='a' style="display: none"/>
       <div :style='canDownload ? "display: block":"display: none"' style="margin-top: 10px;">
-        <b-form-select v-model="selected" :options="options"></b-form-select>
+        <b-form-select v-model="selected" :options="options" @change="onSelectChanged"></b-form-select>
         <vue-slider style="margin-top: 20px;" v-model="value" @change='change'/>
       </div>
     </div>
@@ -30,10 +33,11 @@ export default {
       photo: null, // 选择的图片
       selected: 'brightness', // 选项
       options: [
-        { value: 'brightness', text: '亮度' },
-        { value: 'contrast', text: '对比度' }
+        { value: 'brightness', text: '亮度', num: 50 },
+        { value: 'contrast', text: '对比度', num: 50 }
       ],
-      timeoutId: null
+      timeoutId: null,
+      loading: false // 修改图片中
     }
   },
 
@@ -55,11 +59,19 @@ export default {
   },
 
   methods: {
+    //  选项改变
+    onSelectChanged (e) {
+      this.value = this.options.filter(option => option.value === e)[0].num
+      // console.log(this.value)
+    },
+
     // when slider change
     change () {
       if (this.timeoutId) {
         clearTimeout(this.timeoutId)
+        this.loading = false
       }
+      this.loading = true
       this.timeoutId = setTimeout(() => {
         Jimp.read(this.photo.src)
           .then(image => {
@@ -77,9 +89,12 @@ export default {
                   this.photo.src = imgSrc
                 })
             }
+            this.loading = false
+            this.options.filter(option => option.value === this.selected)[0].num = this.value
           })
           .catch(err => {
             console.error(err)
+            this.loading = false
           })
       }, 500)
     },
