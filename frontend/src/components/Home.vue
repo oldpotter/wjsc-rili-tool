@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import moment from 'moment'
-import Jimp from 'jimp'
+import dayjs from 'dayjs'
+// import Jimp from 'jimp'
 export default {
   name: 'Home',
 
@@ -73,6 +73,7 @@ export default {
       }
       this.loading = true
       this.timeoutId = setTimeout(() => {
+        /*
         Jimp.read(this.photo.src)
           .then(image => {
             const value = this.value / 100 - 0.5
@@ -95,7 +96,7 @@ export default {
           .catch(err => {
             console.error(err)
             this.loading = false
-          })
+          })*/
       }, 500)
     },
 
@@ -114,7 +115,7 @@ export default {
         //  直接createElement('a')有时没有反应，不知道为什么
         let link = document.getElementById('a')
         link.href = document.getElementById('canvas').toDataURL('image/png')
-        link.download = `${moment().unix()}.png`
+        link.download = `${dayjs().unix()}.png`
         link.click()
       }
       img.src = src
