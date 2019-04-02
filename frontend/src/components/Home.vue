@@ -10,7 +10,7 @@
       <b-button block variant='primary' @click='open'>打开相机</b-button>
       <input id="takepicture" type="file" accept="image/*" style="display: none" @change="setImagePreview">
       <a id='a' style="display: none"/>
-      <div :style='canDownload ? "display: block":"display: none"' style="margin-top: 10px;">
+      <div hidden :style='canDownload ? "display: block":"display: none"' style="margin-top: 10px;">
         <b-form-select v-model="selected" :options="options" @change="onSelectChanged"></b-form-select>
         <vue-slider style="margin-top: 20px;" v-model="value" @change='change'/>
       </div>
