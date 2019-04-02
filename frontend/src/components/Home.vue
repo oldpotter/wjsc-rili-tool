@@ -27,7 +27,7 @@ export default {
   data () {
     return {
       qrPath: '/static/pic/qr.jpeg',
-      logoPath: '/static/pic/logo.png',
+      logoPath: '/static/pic/logo1.png',
       canDownload: false,
       value: 50, // slider value
       photo: null, // 选择的图片
@@ -140,7 +140,7 @@ export default {
       qrImg.src = this.qrPath
       const logoImg = new Image()
       logoImg.onload = () => {
-        context.drawImage(logoImg, 10, 260, logoImg.width / 50, logoImg.height / 50)
+        context.drawImage(logoImg, 10, 260, logoImg.width / 14, logoImg.height / 14)
       }
       logoImg.src = this.logoPath
     },
