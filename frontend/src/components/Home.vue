@@ -20,14 +20,15 @@
 
 <script>
 import dayjs from 'dayjs'
-// import Jimp from 'jimp'
+import axios from 'axios'
+
 export default {
   name: 'Home',
 
   data () {
     return {
       qrPath: '/static/pic/qr.jpeg',
-      logoPath: '/static/pic/logo1.png',
+      logoPath: '/static/pic/logo.jpg',
       canDownload: false,
       value: 50, // slider value
       photo: null, // 选择的图片
