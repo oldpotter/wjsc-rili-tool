@@ -101,7 +101,7 @@ export default {
 
     //  下载图片
     download () {
-      const src = document.getElementById('canvas').toDataURL('image/jpeg')
+      const src = document.getElementById('canvas').toDataURL('image/jpg')
       const context = document.getElementById('canvas').getContext('2d')
       context.clearRect(0, 0, 300, 300)
       context.fillStyle = '#ffffff'
@@ -113,8 +113,8 @@ export default {
         context.drawImage(img, -dx, -dy, dWidth, dHeight)
         //  直接createElement('a')有时没有反应，不知道为什么
         let link = document.getElementById('a')
-        link.href = document.getElementById('canvas').toDataURL('image/png')
-        link.download = `${dayjs().unix()}.png`
+        link.href = document.getElementById('canvas').toDataURL('image/jpg')
+        link.download = `${dayjs().unix()}.jpg`
         link.click()
       }
       img.src = src
