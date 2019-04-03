@@ -62,7 +62,7 @@ export default {
 
   methods: {
     test () {
-      const url = process.env.NODE_ENV === 'production' ? 'http://shenkeling.top:9001/api/test' : 'http://192.168.31.99:5000/api/test'
+      const url = process.env.NODE_ENV === 'production' ? 'https://wjsc-rili-2019.shenkeling.top/api/test' : 'http://192.168.31.99:5000/api/test'
       axios.get(url)
         .then(res => {
           console.log(res)
