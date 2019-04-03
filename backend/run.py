@@ -9,7 +9,7 @@ cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 @app.route('/api/test')
 def test():
 	response = {
-		'test': u'你好'
+		'test': '你好'
 	}
 	return jsonify(response)
 
