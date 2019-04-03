@@ -29,11 +29,7 @@ export default {
   data () {
     return {
       qrPath: '/static/pic/qr.jpeg',
-<<<<<<< HEAD
       logoPath: '/static/pic/logo.jpg',
-=======
-      logoPath: '/static/pic/logo.png',
->>>>>>> parent of 083c63b... 1.1.2
       canDownload: false,
       value: 50, // slider value
       photo: null, // 选择的图片
@@ -151,12 +147,12 @@ export default {
       context.globalCompositeOperation = 'source-over'
       const qrImg = new Image()
       qrImg.onload = () => {
-        context.drawImage(qrImg, 250, 250, 40, 40)
+        context.drawImage(qrImg, 250, 250, 37, 37)
       }
       qrImg.src = this.qrPath
       const logoImg = new Image()
       logoImg.onload = () => {
-        context.drawImage(logoImg, 10, 260, logoImg.width / 50, logoImg.height / 50)
+        context.drawImage(logoImg, 10, 260, logoImg.width / 7, logoImg.height / 7)
       }
       logoImg.src = this.logoPath
     },
