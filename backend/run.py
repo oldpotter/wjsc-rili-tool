@@ -1,19 +1,10 @@
 # -*- coding: UTF-8 -*- 
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS
 import requests
 
-
 app = Flask(__name__, static_folder='../dist/static', template_folder='../dist')
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
-
-@app.route('/api/test')
-def test():
-	response = {
-		'test': '你好'
-	}
-	return jsonify(response)
-
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

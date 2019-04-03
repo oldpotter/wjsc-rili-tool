@@ -7,21 +7,20 @@
     </div>
     <div style="padding: 10vw;">
       <b-button v-bind:disabled='!canDownload' block variant='success' @click='download'>下载图片</b-button>
-      <b-button block variant='primary' @click='open'>打开相机</b-button>
+      <b-button block variant='primary' @click='open'>获取图片</b-button>
       <input id="takepicture" type="file" accept="image/*" style="display: none" @change="setImagePreview">
       <a id='a' style="display: none"/>
-      <div hidden :style='canDownload ? "display: block":"display: none"' style="margin-top: 10px;">
+      <div :style='canDownload ? "display: block":"display: none"' style="margin-top: 10px;">
         <b-form-select v-model="selected" :options="options" @change="onSelectChanged"></b-form-select>
         <vue-slider style="margin-top: 20px;" v-model="value" @change='change'/>
       </div>
-      <b-button block variant='primary' @click='test'>测试</b-button>
     </div>
   </div>
 </template>
 
 <script>
 import dayjs from 'dayjs'
-import axios from 'axios'
+import Jimp from 'jimp'
 
 export default {
   name: 'Home',
@@ -61,19 +60,9 @@ export default {
   },
 
   methods: {
-    test () {
-      const url = process.env.NODE_ENV === 'production' ? 'https://wjsc-rili-2019.shenkeling.top/api/test' : 'http://192.168.31.99:5000/api/test'
-      axios.get(url)
-        .then(res => {
-          console.log(res)
-        })
-        .catch(err => console.error(err))
-    },
-
     //  选项改变
     onSelectChanged (e) {
       this.value = this.options.filter(option => option.value === e)[0].num
-      // console.log(this.value)
     },
 
     // when slider change
@@ -84,7 +73,6 @@ export default {
       }
       this.loading = true
       this.timeoutId = setTimeout(() => {
-        /*
         Jimp.read(this.photo.src)
           .then(image => {
             const value = this.value / 100 - 0.5
@@ -107,13 +95,13 @@ export default {
           .catch(err => {
             console.error(err)
             this.loading = false
-          })*/
+          })
       }, 500)
     },
 
     //  下载图片
     download () {
-      const src = document.getElementById('canvas').toDataURL('image/jpg')
+      const src = document.getElementById('canvas').toDataURL('image/jpeg')
       const context = document.getElementById('canvas').getContext('2d')
       context.clearRect(0, 0, 300, 300)
       context.fillStyle = '#ffffff'
