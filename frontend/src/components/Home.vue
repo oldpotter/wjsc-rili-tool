@@ -14,6 +14,7 @@
         <b-form-select v-model="selected" :options="options" @change="onSelectChanged"></b-form-select>
         <vue-slider style="margin-top: 20px;" v-model="value" @change='change'/>
       </div>
+      <b-button block variant='primary' @click='test'>测试</b-button>
     </div>
   </div>
 </template>
@@ -60,6 +61,15 @@ export default {
   },
 
   methods: {
+    test () {
+      const url = process.env.NODE_ENV === 'production' ? 'http://shenkeling.top:9001/api/test' : 'http://192.168.31.99:5000/api/test'
+      axios.get(url)
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => console.error(err))
+    },
+
     //  选项改变
     onSelectChanged (e) {
       this.value = this.options.filter(option => option.value === e)[0].num
